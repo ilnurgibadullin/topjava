@@ -15,6 +15,7 @@
         <th>Дата/Время</th>
         <th>Описание</th>
         <th>Калории</th>
+        <th colspan=2>Действие</th>
     </tr>
 
     <jsp:useBean id="mealsTo" scope="request" type="java.util.List"/>
@@ -28,6 +29,8 @@
             <td style="border:1px solid gray;">${mealTo.dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))}</td>
             <td style="border:1px solid gray;">${mealTo.description}</td>
             <td style="border:1px solid gray;">${mealTo.calories}</td>
+            <td><a href="MealServlet?action=edit&mealId=<c:out value="${mealTo.id}"/>">Update</a></td>
+            <td><a href="MealServlet?action=delete&mealId=<c:out value="${mealTo.id}"/>">Delete</a></td>
         </tr>
     </c:forEach>
 </table>

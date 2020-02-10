@@ -43,8 +43,7 @@ public class MealServlet extends HttpServlet {
 
         List<MealTo> mealToList = MealsUtil.filteredByStreams(service.getAll(), LocalTime.MIN, LocalTime.MAX, 2000);
 
-
-        String forward = "";
+        String forward;
         String action = request.getParameter("action");
 
         if (action.equalsIgnoreCase("delete")){
@@ -68,23 +67,19 @@ public class MealServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        List<MealTo> mealToList = MealsUtil.filteredByStreams(service.getAll(), LocalTime.MIN, LocalTime.MAX, 2000);
         Meal meal;
-        try {
-            meal = new Meal(LocalDateTime.parse(req.getParameter("dob"),
+        meal = new Meal(LocalDateTime.parse(req.getParameter("dob"),
                     DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")), req.getParameter("description"),
                     Integer.parseInt(req.getParameter("calories")));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
         String mealId = req.getParameter("mealid");
         if(mealId == null || mealId.isEmpty()) {
             service.save(meal);
         } else {
-            meal.setId(new AtomicLong(mealId));
-            dao.updateUser(user);
+            meal.setId(new AtomicLong(Integer.parseInt(mealId)));
+            service.update(meal);
         }
-        RequestDispatcher view = req.getRequestDispatcher(LIST_USER);
-        req.setAttribute("users", dao.getAllUsers());
-        view.forward(req, response);
+        req.setAttribute("mealsTo", mealToList);
+        req.getRequestDispatcher(LIST_MEAL).forward(req, resp);
     }
 }
