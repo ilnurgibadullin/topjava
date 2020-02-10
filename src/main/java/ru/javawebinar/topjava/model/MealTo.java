@@ -5,6 +5,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class MealTo {
+
+    private long id;
+
     private final LocalDateTime dateTime;
 
     private final String description;
@@ -28,6 +31,10 @@ public class MealTo {
                 ", calories=" + calories +
                 ", excess=" + excess +
                 '}';
+    }
+
+    public long getId() {
+        return id;
     }
 
     public LocalDateTime getDateTime() {

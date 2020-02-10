@@ -1,22 +1,37 @@
 package ru.javawebinar.topjava.service;
 
+import ru.javawebinar.topjava.dao.Dao;
 import ru.javawebinar.topjava.model.Meal;
 
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
-public class MealService {
-    public static List<Meal> getAll() {
-        return Arrays.asList(
-                new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Завтрак", 500),
-                new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 13, 0), "Обед", 1000),
-                new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 20, 0), "Ужин", 500),
-                new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 0, 0), "Еда на граничное значение", 100),
-                new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 10, 0), "Завтрак", 1000),
-                new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 13, 0), "Обед", 500),
-                new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0), "Ужин", 410)
-        );
+public class MealService implements Service<Meal> {
+
+    private Dao<Meal> dao;
+
+    @Override
+    public Optional<Meal> get(long id) {
+        return Optional.empty();
+    }
+
+    @Override
+    public List<Meal> getAll() {
+        return dao.getAll();
+    }
+
+    @Override
+    public void save(Meal meal) {
+
+    }
+
+    @Override
+    public void update(Meal meal) {
+
+    }
+
+    @Override
+    public void delete(long id) {
+
     }
 }
