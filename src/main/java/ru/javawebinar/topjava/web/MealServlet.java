@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
+import ru.javawebinar.topjava.dao.MealDao;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.MealTo;
 import ru.javawebinar.topjava.service.MealService;
@@ -13,11 +14,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 
@@ -33,7 +34,7 @@ public class MealServlet extends HttpServlet {
 
     public MealServlet() {
         super();
-        service = new MealService();
+        service = new MealService(new MealDao());
     }
 
     @Override
@@ -42,44 +43,41 @@ public class MealServlet extends HttpServlet {
         log.debug("forward to meals");
 
         List<MealTo> mealToList = MealsUtil.filteredByStreams(service.getAll(), LocalTime.MIN, LocalTime.MAX, 2000);
-
-        String forward;
+        String forward = "";
         String action = request.getParameter("action");
-
-        if (action.equalsIgnoreCase("delete")){
+        if (action != null && action.equalsIgnoreCase("delete")){
             long mealId = Long.parseLong(request.getParameter("mealId"));
             service.delete(mealId);
             forward = LIST_MEAL;
             request.setAttribute("mealsTo", mealToList);
-        } else if (action.equalsIgnoreCase("edit")){
+        } else if (action != null && action.equalsIgnoreCase("edit")){
             forward = INSERT_OR_EDIT;
             long mealId = Long.parseLong(request.getParameter("mealId"));
-            Optional<Meal> meal = service.get(mealId);
-            request.setAttribute("meal", meal.get());
-        } else if (action.equalsIgnoreCase("listMeal")){
+            Meal meal = service.get(mealId);
+            if (meal != null) {
+                request.setAttribute("meal", meal);
+            }
+        } else {
             forward = LIST_MEAL;
             request.setAttribute("meals", mealToList);
-        } else {
-            forward = INSERT_OR_EDIT;
         }
         request.getRequestDispatcher(forward).forward(request, response);
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<MealTo> mealToList = MealsUtil.filteredByStreams(service.getAll(), LocalTime.MIN, LocalTime.MAX, 2000);
-        Meal meal;
-        meal = new Meal(LocalDateTime.parse(req.getParameter("dob"),
-                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")), req.getParameter("description"),
-                    Integer.parseInt(req.getParameter("calories")));
-        String mealId = req.getParameter("mealid");
-        if(mealId == null || mealId.isEmpty()) {
+        Meal meal = new Meal(LocalDateTime.parse(request.getParameter("dateTime"),
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")), request.getParameter("description"),
+                Integer.parseInt(request.getParameter("calories")));
+        String mealId = request.getParameter("mealid");
+        if (mealId == null || mealId.isEmpty()) {
             service.save(meal);
         } else {
-            meal.setId(new AtomicLong(Integer.parseInt(mealId)));
+            meal.setId(new AtomicLong(Long.parseLong(mealId)));
             service.update(meal);
         }
-        req.setAttribute("mealsTo", mealToList);
-        req.getRequestDispatcher(LIST_MEAL).forward(req, resp);
+        request.setAttribute("mealsTo", mealToList);
+        request.getRequestDispatcher(LIST_MEAL).forward(request, response);
     }
 }

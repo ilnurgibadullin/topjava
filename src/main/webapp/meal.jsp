@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR" pageEncoding="EUC-KR"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
@@ -11,16 +11,14 @@
 <body>
     <form method="POST" action='MealServlet' name="frmAddUser">
         ID : <input type="text" readonly="readonly" name="mealId"
-            value="<c:out value="${meal.id}" />" /> <br />
-        Дата/Время : <input
-            type="text" name="dateTime"
-            value="<fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${meal.dateTime}" />" /> <br />
-        Описание : <input
-            type="text" name="description"
-            value="<c:out value="${meal.description}" />" /> <br />
+            value="<c:out value="${mealTo.id}" />" /> <br />
+        Дата/Время : <input type="text" name="dateTime"
+            value="<fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${mealTo.dateTime}" />" /> <br />
+        Описание : <input type="text" name="description"
+            value="<c:out value="${mealTo.description}" />" /> <br />
         Калории : <input type="text" name="calories"
-            value="<c:out value="${meal.calories}" />" /> <br /> <input
-            type="submit" value="Submit" />
+            value="<c:out value="${mealTo.calories}" />" /> <br />
+        <input type="submit" value="Submit" />
     </form>
 </body>
 </html>

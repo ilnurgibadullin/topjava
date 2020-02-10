@@ -29,10 +29,11 @@
             <td style="border:1px solid gray;">${mealTo.dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))}</td>
             <td style="border:1px solid gray;">${mealTo.description}</td>
             <td style="border:1px solid gray;">${mealTo.calories}</td>
-            <td><a href="MealServlet?action=edit&mealId=<c:out value="${mealTo.id}"/>">Update</a></td>
-            <td><a href="MealServlet?action=delete&mealId=<c:out value="${mealTo.id}"/>">Delete</a></td>
+            <td><a href="${pageContext.request.contextPath}/meals?action=edit&mealId=<c:out value="${mealTo.id}"/>">Обновить</a></td>
+            <td><a href="${pageContext.request.contextPath}/meals?action=delete&mealId=<c:out value="${mealTo.id}"/>">Удалить</a></td>
         </tr>
     </c:forEach>
 </table>
+<p><a href="${pageContext.request.contextPath}/meals?action=insert">Добавить приём пищи</a></p>
 </body>
 </html>
