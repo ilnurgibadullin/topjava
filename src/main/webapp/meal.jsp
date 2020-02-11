@@ -13,9 +13,9 @@
         Дата/Время : <input type="datetime" name="dateTime" value="<fmt:parseDate value="${meal.dateTime}"
         pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
             <fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${parsedDateTime}" />" /> <br />
-        Описание : <input type="text" name="description"
+        Описание : <input type="text" name="description" placeholder="Описание"
             value="<c:out value="${meal.description}" />" /> <br />
-        Калории : <input type="text" name="calories"
+        Калории : <input type="text" name="calories" placeholder="1000"
             value="<c:out value="${meal.calories}" />" /> <br />
         <input type="submit" value="Submit" />
     </form>
