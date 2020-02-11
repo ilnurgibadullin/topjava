@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class MealTo {
 
-    private AtomicLong id;
+    private final AtomicLong id;
 
     private final LocalDateTime dateTime;
 
@@ -19,13 +19,6 @@ public class MealTo {
 
     public MealTo(AtomicLong id, LocalDateTime dateTime, String description, int calories, boolean excess) {
         this.id = id;
-        this.dateTime = dateTime;
-        this.description = description;
-        this.calories = calories;
-        this.excess = excess;
-    }
-
-    public MealTo(LocalDateTime dateTime, String description, int calories, boolean excess) {
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
@@ -44,10 +37,6 @@ public class MealTo {
 
     public AtomicLong getId() {
         return id;
-    }
-
-    public void setId(AtomicLong id) {
-        this.id = id;
     }
 
     public LocalDateTime getDateTime() {

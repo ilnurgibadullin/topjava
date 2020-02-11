@@ -4,11 +4,14 @@ import ru.javawebinar.topjava.model.Meal;
 
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class MealDao implements Dao<Meal> {
-    private AtomicLong count = new AtomicLong(7);
+    public static AtomicLong count = new AtomicLong(7);
 
     private List<Meal> mealList = Collections.synchronizedList(new ArrayList<>(Arrays.asList(
             new Meal(new AtomicLong(1), LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Завтрак", 500),
@@ -38,12 +41,12 @@ public class MealDao implements Dao<Meal> {
     @Override
     public void save(Meal meal) {
         mealList.add(meal);
-        count.getAndIncrement();
     }
 
     @Override
     public void update(Meal meal) {
-
+        save(meal);
+        delete(meal.getId().longValue());
     }
 
     @Override

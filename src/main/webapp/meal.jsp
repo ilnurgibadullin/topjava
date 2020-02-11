@@ -9,7 +9,7 @@
 <title>Add new meal</title>
 </head>
 <body>
-    <form method="POST" action='MealServlet' name="frmAddUser">
+    <form method="POST" action='MealServlet' name="frmAddMeal">
         ID : <input type="text" readonly="readonly" name="mealId"
             value="<c:out value="${mealTo.id}" />" /> <br />
         Дата/Время : <input type="text" name="dateTime"

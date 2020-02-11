@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class Meal {
 
-    private AtomicLong id;
+    private final AtomicLong id;
 
     private final LocalDateTime dateTime;
 
@@ -22,18 +22,8 @@ public class Meal {
         this.calories = calories;
     }
 
-    public Meal(LocalDateTime dateTime, String description, int calories) {
-        this.dateTime = dateTime;
-        this.description = description;
-        this.calories = calories;
-    }
-
     public AtomicLong getId() {
         return id;
-    }
-
-    public void setId(AtomicLong id) {
-        this.id =  id;
     }
 
     public LocalDateTime getDateTime() {
