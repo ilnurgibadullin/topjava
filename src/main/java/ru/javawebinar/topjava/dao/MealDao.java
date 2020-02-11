@@ -45,8 +45,13 @@ public class MealDao implements Dao<Meal> {
 
     @Override
     public void update(Meal meal) {
-        save(meal);
-        delete(meal.getId().longValue());
+        for (int i = 0; i < mealList.size(); i++) {
+            if (mealList.get(i).getId().longValue() == meal.getId().longValue()) {
+                mealList.remove(i);
+                mealList.add(i, meal);
+                break;
+            }
+        }
     }
 
     @Override

@@ -40,13 +40,13 @@ public class MealServlet extends HttpServlet {
         String forward = "";
         String action = request.getParameter("action");
         if (action.equalsIgnoreCase("delete")){
-            long mealId = Long.parseLong(request.getParameter("mealId"));
-            service.delete(mealId);
+            long id = Long.parseLong(request.getParameter("id"));
+            service.delete(id);
             forward = LIST_MEAL;
             request.setAttribute("mealsTo", mealToList);
         } else if (action.equalsIgnoreCase("edit")){
             forward = INSERT_OR_EDIT;
-            long mealId = Long.parseLong(request.getParameter("mealId"));
+            long mealId = Long.parseLong(request.getParameter("id"));
             Meal mealTo = service.get(mealId);
             request.setAttribute("mealTo", mealTo);
         } else if (action.equalsIgnoreCase("listMeal")) {
@@ -60,21 +60,20 @@ public class MealServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<MealTo> mealToList = MealsUtil.filteredByStreams(service.getAll(), LocalTime.MIN, LocalTime.MAX, 2000);
         Meal meal;
-        String mealId = request.getParameter("mealid");
-        if (mealId == null || mealId.isEmpty()) {
+        String id = request.getParameter("id");
+        if (id == null || id.isEmpty()) {
             meal = new Meal(new AtomicLong(MealDao.count.incrementAndGet()),
                     LocalDateTime.parse(request.getParameter("dateTime"), DATE_TIME_FORMATTER),
                     request.getParameter("description"), Integer.parseInt(request.getParameter("calories")));
             service.save(meal);
         } else {
-            meal = new Meal(new AtomicLong(Long.parseLong(mealId)),
+            meal = new Meal(new AtomicLong(Long.parseLong(id)),
                     LocalDateTime.parse(request.getParameter("dateTime"), DATE_TIME_FORMATTER),
                     request.getParameter("description"), Integer.parseInt(request.getParameter("calories")));
             service.update(meal);
         }
-
+        List<MealTo> mealToList = MealsUtil.filteredByStreams(service.getAll(), LocalTime.MIN, LocalTime.MAX, 2000);
         request.setAttribute("mealsTo", mealToList);
         request.getRequestDispatcher(LIST_MEAL).forward(request, response);
     }

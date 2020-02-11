@@ -11,11 +11,11 @@
 <body>
     <form method="POST" action="/meals" name="frmAddMeal">
         Дата/Время : <input type="text" name="dateTime"
-            value="<fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${mealTo.dateTime}" />" /> <br />
+            value="<fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${meal.dateTime}" />" /> <br />
         Описание : <input type="text" name="description"
-            value="<c:out value="${mealTo.description}" />" /> <br />
+            value="<c:out value="${meal.description}" />" /> <br />
         Калории : <input type="text" name="calories"
-            value="<c:out value="${mealTo.calories}" />" /> <br />
+            value="<c:out value="${meal.calories}" />" /> <br />
         <input type="submit" value="Submit" />
     </form>
 </body>
