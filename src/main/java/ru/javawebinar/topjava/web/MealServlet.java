@@ -33,25 +33,23 @@ public class MealServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         log.debug("forward to meals");
-
-        List<MealTo> mealToList = MealsUtil.filteredByStreams(service.getAll(), LocalTime.MIN, LocalTime.MAX, 2000);
+        List<MealTo> mealsTo = MealsUtil.filteredByStreams(service.getAll(), LocalTime.MIN, LocalTime.MAX, 2000);
         String forward = "";
         String action = request.getParameter("action");
         if (action.equalsIgnoreCase("delete")){
             long id = Long.parseLong(request.getParameter("id"));
             service.delete(id);
             forward = LIST_MEAL;
-            request.setAttribute("mealsTo", mealToList);
+            request.setAttribute("mealsTo", mealsTo);
         } else if (action.equalsIgnoreCase("edit")){
             forward = INSERT_OR_EDIT;
-            long mealId = Long.parseLong(request.getParameter("id"));
-            Meal mealTo = service.get(mealId);
-            request.setAttribute("mealTo", mealTo);
+            long id = Long.parseLong(request.getParameter("id"));
+            Meal meal = service.get(id);
+            request.setAttribute("meal", meal);
         } else if (action.equalsIgnoreCase("listMeal")) {
             forward = LIST_MEAL;
-            request.setAttribute("mealsTo", mealToList);
+            request.setAttribute("mealsTo", mealsTo);
         } else {
             forward = INSERT_OR_EDIT;
         }
@@ -60,6 +58,7 @@ public class MealServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         Meal meal;
         String id = request.getParameter("id");
         if (id == null || id.isEmpty()) {
@@ -73,8 +72,8 @@ public class MealServlet extends HttpServlet {
                     request.getParameter("description"), Integer.parseInt(request.getParameter("calories")));
             service.update(meal);
         }
-        List<MealTo> mealToList = MealsUtil.filteredByStreams(service.getAll(), LocalTime.MIN, LocalTime.MAX, 2000);
-        request.setAttribute("mealsTo", mealToList);
+        List<MealTo> mealsTo = MealsUtil.filteredByStreams(service.getAll(), LocalTime.MIN, LocalTime.MAX, 2000);
+        request.setAttribute("mealsTo", mealsTo);
         request.getRequestDispatcher(LIST_MEAL).forward(request, response);
     }
 }
