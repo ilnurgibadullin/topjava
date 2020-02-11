@@ -9,9 +9,7 @@
 <title>Add new meal</title>
 </head>
 <body>
-    <form method="POST" action='MealServlet' name="frmAddMeal">
-        ID : <input type="text" readonly="readonly" name="mealId"
-            value="<c:out value="${mealTo.id}" />" /> <br />
+    <form method="POST" action="/meals" name="frmAddMeal">
         Дата/Время : <input type="text" name="dateTime"
             value="<fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${mealTo.dateTime}" />" /> <br />
         Описание : <input type="text" name="description"

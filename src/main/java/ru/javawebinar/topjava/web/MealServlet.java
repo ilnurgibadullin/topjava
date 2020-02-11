@@ -28,12 +28,8 @@ public class MealServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final String INSERT_OR_EDIT = "/meal.jsp";
     private static final String LIST_MEAL = "/meals.jsp";
-    private Service<Meal> service;
-
-    public MealServlet() {
-        super();
-        service = new MealService(new MealDao());
-    }
+    private static final Service<Meal> service = new MealService(new MealDao());
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -68,14 +64,14 @@ public class MealServlet extends HttpServlet {
         Meal meal;
         String mealId = request.getParameter("mealid");
         if (mealId == null || mealId.isEmpty()) {
-            meal = new Meal(new AtomicLong(MealDao.count.incrementAndGet()), LocalDateTime.parse(request.getParameter("dateTime"),
-                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")), request.getParameter("description"),
-                    Integer.parseInt(request.getParameter("calories")));
+            meal = new Meal(new AtomicLong(MealDao.count.incrementAndGet()),
+                    LocalDateTime.parse(request.getParameter("dateTime"), DATE_TIME_FORMATTER),
+                    request.getParameter("description"), Integer.parseInt(request.getParameter("calories")));
             service.save(meal);
         } else {
-            meal = new Meal(new AtomicLong(Long.parseLong(mealId)), LocalDateTime.parse(request.getParameter("dateTime"),
-                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")), request.getParameter("description"),
-                    Integer.parseInt(request.getParameter("calories")));
+            meal = new Meal(new AtomicLong(Long.parseLong(mealId)),
+                    LocalDateTime.parse(request.getParameter("dateTime"), DATE_TIME_FORMATTER),
+                    request.getParameter("description"), Integer.parseInt(request.getParameter("calories")));
             service.update(meal);
         }
 
