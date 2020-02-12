@@ -29,8 +29,8 @@
             <td style="border:1px solid gray;">${mealTo.dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))}</td>
             <td style="border:1px solid gray;">${mealTo.description}</td>
             <td style="border:1px solid gray;">${mealTo.calories}</td>
-            <td><a href="${pageContext.request.contextPath}/meals?action=edit&id=<c:out value="${mealTo.id}"/>">Обновить</a></td>
-            <td><a href="${pageContext.request.contextPath}/meals?action=delete&id=<c:out value="${mealTo.id}"/>">Удалить</a></td>
+            <td><a href="${pageContext.request.contextPath}/meals?action=edit&id=${mealTo.id}/>">Обновить</a></td>
+            <td><a href="${pageContext.request.contextPath}/meals?action=delete&id=${mealTo.id}/>">Удалить</a></td>
         </tr>
     </c:forEach>
 </table>
