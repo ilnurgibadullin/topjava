@@ -24,47 +24,50 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class MealServlet extends HttpServlet {
     private static final Logger log = getLogger(UserServlet.class);
     private static final long serialVersionUID = 1L;
-    private static final String INSERT_OR_EDIT = "/meal.jsp";
-    private static final String LIST_MEAL = "/meals.jsp";
+    private static final String INSERT_OR_EDIT = "meal.jsp";
+    private static final String LIST_MEAL = "meals.jsp";
     private static final Dao<Meal> dao = new MealMemoryDao();
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("forward to meals");
-        List<MealTo> mealsTo = MealsUtil.filteredByStreams(dao.getAll(), LocalTime.MIN, LocalTime.MAX, 2000);
         String forward;
         String action = request.getParameter("action").toLowerCase();
         switch (action) {
             case "delete":
                 dao.delete(Long.parseLong(request.getParameter("id")));
                 forward = LIST_MEAL;
-                request.setAttribute("mealsTo", mealsTo);
+                request.setAttribute("mealsTo",
+                        MealsUtil.filteredByStreams(dao.getAll(), LocalTime.MIN, LocalTime.MAX, 2000));
                 break;
             case "edit":
                 forward = INSERT_OR_EDIT;
                 Meal meal = dao.get(Long.parseLong(request.getParameter("id")));
                 request.setAttribute("meal", meal);
                 break;
-            case "listmeal":
-                forward = LIST_MEAL;
-                request.setAttribute("mealsTo", mealsTo);
+            case "insert":
+                forward = INSERT_OR_EDIT;
                 break;
+            case "list":
             default :
                 forward = LIST_MEAL;
+                request.setAttribute("mealsTo",
+                        MealsUtil.filteredByStreams(dao.getAll(), LocalTime.MIN, LocalTime.MAX, 2000));
                 break;
         }
         request.getRequestDispatcher(forward).forward(request, response);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         Meal meal;
-        String id = request.getParameter("id");
         String description = request.getParameter("description");
         int calories = Integer.parseInt(request.getParameter("calories"));
         LocalDateTime dateTime = LocalDateTime.parse(request.getParameter("dateTime"), DATE_TIME_FORMATTER);
+        String id = request.getParameter("id");
         if (id == null || id.isEmpty()) {
             meal = new Meal(0, dateTime, description, calories);
             dao.save(meal);
@@ -72,8 +75,9 @@ public class MealServlet extends HttpServlet {
             meal = new Meal(Long.parseLong(id), dateTime, description, calories);
             dao.update(meal);
         }
-        List<MealTo> mealsTo = MealsUtil.filteredByStreams(dao.getAll(), LocalTime.MIN, LocalTime.MAX, 2000);
-        request.setAttribute("mealsTo", mealsTo);
+        request.setAttribute("mealsTo",
+                MealsUtil.filteredByStreams(dao.getAll(), LocalTime.MIN, LocalTime.MAX, 2000));
         request.getRequestDispatcher(LIST_MEAL).forward(request, response);
+        response.sendRedirect("meals.jsp");
     }
 }
