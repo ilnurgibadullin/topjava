@@ -26,7 +26,7 @@ public class MealMemoryDao implements Dao<Meal> {
 
     @Override
     public Meal get(long id) {
-        return mealHashMap.getOrDefault(id, null);
+        return mealHashMap.get(id);
     }
 
     @Override

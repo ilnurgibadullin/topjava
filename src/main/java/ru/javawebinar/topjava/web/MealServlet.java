@@ -26,7 +26,7 @@ public class MealServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final String INSERT_OR_EDIT = "meal.jsp";
     private static final String LIST_MEAL = "meals.jsp";
-    private static final Dao<Meal> dao = new MealMemoryDao();
+    private final Dao<Meal> dao = new MealMemoryDao();
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     @Override
