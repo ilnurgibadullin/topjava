@@ -24,33 +24,31 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class MealServlet extends HttpServlet {
     private static final Logger log = getLogger(UserServlet.class);
     private static final long serialVersionUID = 1L;
-    private static final String INSERT_OR_EDIT = "meal.jsp";
-    private static final String LIST_MEAL = "meals.jsp";
     private final Dao<Meal> dao = new MealMemoryDao();
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("forward to meals");
-        String action = request.getParameter("action").toLowerCase();
+        String action = request.getParameter("action");
         switch (action == null ? "all" : action) {
             case "delete":
                 dao.delete(Long.parseLong(request.getParameter("id")));
-                response.sendRedirect(LIST_MEAL);
+                response.sendRedirect("meals");
                 break;
             case "edit":
                 Meal meal = dao.get(Long.parseLong(request.getParameter("id")));
                 request.setAttribute("meal", meal);
-                request.getRequestDispatcher(INSERT_OR_EDIT).forward(request, response);
+                request.getRequestDispatcher("meal.jsp").forward(request, response);
                 break;
             case "insert":
-                request.getRequestDispatcher(INSERT_OR_EDIT).forward(request, response);
+                request.getRequestDispatcher("meal.jsp").forward(request, response);
                 break;
             case "all":
             default :
                 request.setAttribute("mealsTo",
                         MealsUtil.filteredByStreams(dao.getAll(), LocalTime.MIN, LocalTime.MAX, 2000));
-                request.getRequestDispatcher(LIST_MEAL).forward(request, response);
+                request.getRequestDispatcher("meals.jsp").forward(request, response);
                 break;
         }
     }
@@ -71,6 +69,6 @@ public class MealServlet extends HttpServlet {
             meal = new Meal(Long.parseLong(id), dateTime, description, calories);
             dao.update(meal);
         }
-        response.sendRedirect(LIST_MEAL);
+        response.sendRedirect("meals");
     }
 }
