@@ -32,36 +32,32 @@ public class MealServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("forward to meals");
-        String forward;
         String action = request.getParameter("action").toLowerCase();
-        switch (action) {
+        switch (action == null ? "all" : action) {
             case "delete":
                 dao.delete(Long.parseLong(request.getParameter("id")));
-                forward = LIST_MEAL;
-                request.setAttribute("mealsTo",
-                        MealsUtil.filteredByStreams(dao.getAll(), LocalTime.MIN, LocalTime.MAX, 2000));
+                response.sendRedirect(LIST_MEAL);
                 break;
             case "edit":
-                forward = INSERT_OR_EDIT;
                 Meal meal = dao.get(Long.parseLong(request.getParameter("id")));
                 request.setAttribute("meal", meal);
+                request.getRequestDispatcher(INSERT_OR_EDIT).forward(request, response);
                 break;
             case "insert":
-                forward = INSERT_OR_EDIT;
+                request.getRequestDispatcher(INSERT_OR_EDIT).forward(request, response);
                 break;
-            case "list":
+            case "all":
             default :
-                forward = LIST_MEAL;
                 request.setAttribute("mealsTo",
                         MealsUtil.filteredByStreams(dao.getAll(), LocalTime.MIN, LocalTime.MAX, 2000));
+                request.getRequestDispatcher(LIST_MEAL).forward(request, response);
                 break;
         }
-        request.getRequestDispatcher(forward).forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws IOException {
         request.setCharacterEncoding("UTF-8");
         Meal meal;
         String description = request.getParameter("description");
@@ -75,9 +71,6 @@ public class MealServlet extends HttpServlet {
             meal = new Meal(Long.parseLong(id), dateTime, description, calories);
             dao.update(meal);
         }
-        request.setAttribute("mealsTo",
-                MealsUtil.filteredByStreams(dao.getAll(), LocalTime.MIN, LocalTime.MAX, 2000));
-        request.getRequestDispatcher(LIST_MEAL).forward(request, response);
-        response.sendRedirect("meals.jsp");
+        response.sendRedirect(LIST_MEAL);
     }
 }
