@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.service;
 
-import org.springframework.lang.Nullable;
 import ru.javawebinar.topjava.model.Meal;
 
 import java.time.LocalDate;
@@ -18,5 +17,5 @@ public interface MealService {
 
     List<Meal> getAll(int userId);
 
-    List<Meal> getBetweenDates(@Nullable LocalDate startDate, @Nullable LocalDate endDate, int userId);
+    List<Meal> getBetweenDates(LocalDate startDate, LocalDate endDate, int userId);
 }

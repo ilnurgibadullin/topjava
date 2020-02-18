@@ -5,10 +5,11 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
-import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
 public class MealServiceImpl implements MealService {
@@ -21,35 +22,19 @@ public class MealServiceImpl implements MealService {
     }
 
     public Meal create(Meal meal, int userId) {
-        if (repository.save(meal, userId) != null) {
-            return repository.save(meal, userId);
-        } else {
-            throw new NotFoundException("Not exists user");
-        }
+        return repository.save(meal, userId);
     }
 
     public void update(Meal meal, int userId) {
-        if (get(meal.getId(), userId) != null) {
-            repository.save(meal, userId);
-        } else {
-            throw new NotFoundException("Not exists user or not exists meal");
-        }
+        checkNotFoundWithId(repository.save(meal, userId), userId);
     }
 
     public void delete(int id, int userId) {
-        if (repository.get(id, userId) != null) {
-            repository.delete(id, userId);
-        } else {
-            throw new NotFoundException("Not exists user or not exists meal");
-        }
+        checkNotFoundWithId(repository.delete(id, userId), id);
     }
 
     public Meal get(int id, int userId) {
-        if (repository.get(id, userId) != null) {
-            return repository.get(id, userId);
-        } else {
-            throw new NotFoundException("Not exists user or not exists meal");
-        }
+        return checkNotFoundWithId(repository.get(id, userId), id);
     }
 
     public List<Meal> getAll(int userId) {
