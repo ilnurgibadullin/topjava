@@ -5,11 +5,10 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
-import ru.javawebinar.topjava.util.DateTimeUtil;
+import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class MealServiceImpl implements MealService {
@@ -22,19 +21,35 @@ public class MealServiceImpl implements MealService {
     }
 
     public Meal create(Meal meal, int userId) {
-        return repository.save(meal, userId);
+        if (repository.save(meal, userId) != null) {
+            return repository.save(meal, userId);
+        } else {
+            throw new NotFoundException("Not exists user");
+        }
     }
 
     public void update(Meal meal, int userId) {
-        repository.save(meal, userId);
+        if (get(meal.getId(), userId) != null) {
+            repository.save(meal, userId);
+        } else {
+            throw new NotFoundException("Not exists user or not exists meal");
+        }
     }
 
     public void delete(int id, int userId) {
-        repository.delete(id, userId);
+        if (repository.get(id, userId) != null) {
+            repository.delete(id, userId);
+        } else {
+            throw new NotFoundException("Not exists user or not exists meal");
+        }
     }
 
     public Meal get(int id, int userId) {
-        return repository.get(id, userId);
+        if (repository.get(id, userId) != null) {
+            return repository.get(id, userId);
+        } else {
+            throw new NotFoundException("Not exists user or not exists meal");
+        }
     }
 
     public List<Meal> getAll(int userId) {
@@ -42,8 +57,6 @@ public class MealServiceImpl implements MealService {
     }
 
     public List<Meal> getBetweenDates(@Nullable LocalDate startDate, @Nullable LocalDate endDate, int userId) {
-        return getAll(userId).stream()
-                .filter(meal -> DateTimeUtil.isBetweenInclusive(meal.getDate(), startDate, endDate))
-                .collect(Collectors.toList());
+        return repository.getBetween(startDate, endDate, userId);
     }
 }
