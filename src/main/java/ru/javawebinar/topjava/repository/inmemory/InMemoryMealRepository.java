@@ -8,12 +8,14 @@ import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Repository
@@ -22,7 +24,8 @@ public class InMemoryMealRepository implements MealRepository {
     private Map<Integer, Map<Integer, Meal>> repository = new ConcurrentHashMap<>();
     private AtomicInteger counter = new AtomicInteger(0);
 
-    {
+    @PostConstruct
+    public void postConstruct() {
         MealsUtil.MEALS.forEach(meal -> save(meal, 1));
     }
 
@@ -32,8 +35,7 @@ public class InMemoryMealRepository implements MealRepository {
         if (repository.get(userId) != null) {
             if (meal.isNew()) {
                 meal.setId(counter.incrementAndGet());
-                repository.get(userId).put(meal.getId(), meal);
-                return meal;
+                return repository.get(userId).put(meal.getId(), meal);
             } else {
                 if (repository.get(userId).get(meal.getId()) != null) {
                     return repository.get(userId).computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
@@ -64,22 +66,22 @@ public class InMemoryMealRepository implements MealRepository {
     @Override
     public List<Meal> getAll(int userId) {
         log.info("getAll from userId={}", userId);
-        if (repository.get(userId) != null || !repository.get(userId).isEmpty()) {
-            return repository.get(userId).values().stream()
-                    .sorted((meal, t1) -> t1.getDateTime().compareTo(meal.getDateTime()))
-                    .collect(Collectors.toList());
-        }
-        return Collections.emptyList();
-
+        return filteredByStream(userId, meal -> true);
     }
 
     @Override
     public List<Meal> getBetween(LocalDate startDate, LocalDate endDate, int userId) {
-        log.info("getAllBetween from startDate={} to endDate={} from userId={}", startDate, endDate, userId);
-        return getAll(userId).stream()
-                    .filter(meal -> DateTimeUtil.isBetweenInclusive(meal.getDate(), startDate, endDate))
+        log.info("getAllBetweenDates from startDate={} to endDate={} from userId={}", startDate, endDate, userId);
+        return filteredByStream(userId, meal -> DateTimeUtil.isBetweenInclusive(meal.getDate(), startDate, endDate));
+    }
+
+    private List<Meal> filteredByStream(int userId, Predicate<Meal> filter) {
+        if (repository.get(userId) != null && !repository.get(userId).isEmpty()) {
+            return repository.get(userId).values().stream()
+                    .filter(filter)
                     .sorted((meal, t1) -> t1.getDateTime().compareTo(meal.getDateTime()))
                     .collect(Collectors.toList());
+        }
+        return Collections.emptyList();
     }
 }
-

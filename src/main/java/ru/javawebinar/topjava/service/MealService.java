@@ -1,21 +1,47 @@
 package ru.javawebinar.topjava.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.repository.MealRepository;
 
 import java.time.LocalDate;
 import java.util.List;
 
-public interface MealService {
+import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
 
-    Meal create(Meal meal, int userId);
+@Service
+public class MealService {
 
-    void update(Meal meal, int userId);
+    private final MealRepository repository;
 
-    void delete(int id, int userId);
+    @Autowired
+    public MealService(MealRepository repository) {
+        this.repository = repository;
+    }
 
-    Meal get(int id, int userId);
+    public Meal create(Meal meal, int userId) {
+        return repository.save(meal, userId);
+    }
 
-    List<Meal> getAll(int userId);
+    public void update(Meal meal, int userId) {
+        checkNotFoundWithId(repository.save(meal, userId), userId);
+    }
 
-    List<Meal> getBetweenDates(LocalDate startDate, LocalDate endDate, int userId);
+    public void delete(int id, int userId) {
+        checkNotFoundWithId(repository.delete(id, userId), id);
+    }
+
+    public Meal get(int id, int userId) {
+        return checkNotFoundWithId(repository.get(id, userId), id);
+    }
+
+    public List<Meal> getAll(int userId) {
+        return repository.getAll(userId);
+    }
+
+    public List<Meal> getBetweenDates(@Nullable LocalDate startDate, @Nullable LocalDate endDate, int userId) {
+        return repository.getBetween(startDate, endDate, userId);
+    }
 }

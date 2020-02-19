@@ -8,6 +8,7 @@ import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 import ru.javawebinar.topjava.util.UsersUtil;
 
+import javax.annotation.PostConstruct;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,8 @@ public class InMemoryUserRepository implements UserRepository {
     private Map<Integer, User> repository = new ConcurrentHashMap<>();
     private AtomicInteger counter = new AtomicInteger(0);
 
-    {
+    @PostConstruct
+    public void postConstruct() {
         UsersUtil.USERS.forEach(this::save);
     }
 
@@ -61,7 +63,7 @@ public class InMemoryUserRepository implements UserRepository {
         log.info("getByEmail {}", email);
         return repository.values().stream()
                 .filter(u -> u.getEmail().equals(email))
-                .findFirst()
-                .get();
+                .findAny()
+                .orElse(null);
     }
 }

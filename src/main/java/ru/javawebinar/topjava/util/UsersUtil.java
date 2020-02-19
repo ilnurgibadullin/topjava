@@ -8,9 +8,9 @@ import java.util.List;
 
 public class UsersUtil {
     public static final List<User> USERS = Arrays.asList(
-            new User(1, "Вася", "vasya@gmail.com", "123", Role.ROLE_USER),
-            new User(2, "Дима", "dima@gmail.com", "321", Role.ROLE_USER),
-            new User(3, "Вова", "vova@gmail.com", "111", Role.ROLE_ADMIN)
+            new User(null, "Вася", "vasya@gmail.com", "123", Role.ROLE_USER),
+            new User(null, "Дима", "dima@gmail.com", "321", Role.ROLE_USER),
+            new User(null, "Вова", "vova@gmail.com", "111", Role.ROLE_ADMIN)
     );
 
 }
