@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.repository.inmemory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
@@ -21,12 +22,19 @@ import java.util.stream.Collectors;
 @Repository
 public class InMemoryMealRepository implements MealRepository {
     private static final Logger log = LoggerFactory.getLogger(InMemoryUserRepository.class);
-    private Map<Integer, Map<Integer, Meal>> repository = new ConcurrentHashMap<>();
+    private final Map<Integer, Map<Integer, Meal>> repository = new ConcurrentHashMap<>();
     private AtomicInteger counter = new AtomicInteger(0);
+
+    @Autowired
+    private InMemoryUserRepository userRepository;
 
     @PostConstruct
     public void postConstruct() {
         MealsUtil.MEALS.forEach(meal -> save(meal, 1));
+    }
+
+    public Map<Integer, Map<Integer, Meal>> getRepository() {
+        return repository;
     }
 
     @Override

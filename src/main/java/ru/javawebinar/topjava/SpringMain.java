@@ -24,6 +24,10 @@ public class SpringMain {
             System.out.println("------------------------------------------------------------------------------------------------------------------------");
             System.out.println(mealRestController.getAll());
             System.out.println(adminUserController.getAll());
+            System.out.println("------------------------------------------------------------------------------------------------------------------------");
+            adminUserController.delete(3);
+            System.out.println(mealRestController.getAll());
+            System.out.println(adminUserController.getAll());
         }
     }
 }
