@@ -24,26 +24,15 @@ public class InMemoryUserRepository implements UserRepository {
     private Map<Integer, User> repository = new ConcurrentHashMap<>();
     private AtomicInteger counter = new AtomicInteger(0);
 
-    @Autowired
-    private InMemoryMealRepository mealRepository;
-
     @PostConstruct
     public void postConstruct() {
         UsersUtil.USERS.forEach(this::save);
     }
 
-    public Map<Integer, User> getRepository() {
-        return repository;
-    }
-
     @Override
     public boolean delete(int id) {
         log.info("delete {}", id);
-        boolean delete = repository.remove(id) != null;
-        if (delete) {
-            mealRepository.getRepository().remove(id);
-        }
-        return delete;
+        return repository.remove(id) != null;
     }
 
     @Override
@@ -52,7 +41,6 @@ public class InMemoryUserRepository implements UserRepository {
         if (user.isNew()) {
             user.setId(counter.incrementAndGet());
             repository.put(user.getId(), user);
-            mealRepository.getRepository().put(user.getId(), new HashMap<>());
             return user;
         }
         return repository.computeIfPresent(user.getId(), (id, oldUser) -> user);
