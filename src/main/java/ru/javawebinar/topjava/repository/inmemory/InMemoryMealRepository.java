@@ -8,7 +8,6 @@ import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 
-import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashMap;
