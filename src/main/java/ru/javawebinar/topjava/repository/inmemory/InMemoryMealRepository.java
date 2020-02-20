@@ -25,11 +25,6 @@ public class InMemoryMealRepository implements MealRepository {
     private final Map<Integer, Map<Integer, Meal>> repository = new ConcurrentHashMap<>();
     private AtomicInteger counter = new AtomicInteger(0);
 
-    @PostConstruct
-    public void postConstruct() {
-        MealsUtil.MEALS.forEach(meal -> save(meal, 1));
-    }
-
     {
         MealsUtil.MEALS.forEach(meal -> save(meal, 1));
     }
@@ -55,6 +50,16 @@ public class InMemoryMealRepository implements MealRepository {
                     map.put(meal.getId(), meal);
                     repository.put(userId, map);
                     return repository.get(userId).get(meal.getId());
+                }
+            }
+        } else {
+            repository.put(userId, new HashMap<>());
+            if (meal.isNew()) {
+                meal.setId(counter.incrementAndGet());
+                return repository.get(userId).put(meal.getId(), meal);
+            } else {
+                if (repository.get(userId).get(meal.getId()) != null) {
+                    return repository.get(userId).computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
                 }
             }
         }
