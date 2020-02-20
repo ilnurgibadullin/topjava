@@ -30,6 +30,10 @@ public class InMemoryMealRepository implements MealRepository {
         MealsUtil.MEALS.forEach(meal -> save(meal, 1));
     }
 
+    {
+        MealsUtil.MEALS.forEach(meal -> save(meal, 1));
+    }
+
 
     @Override
     public Meal save(Meal meal, int userId) {
