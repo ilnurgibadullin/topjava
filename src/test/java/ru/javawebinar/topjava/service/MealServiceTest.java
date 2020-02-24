@@ -73,14 +73,14 @@ public class MealServiceTest {
     @Test
     public void getAll() {
         List<Meal> all = service.getAll(USER_ID);
-        MealTestData.assertMatch(all, LUNCH_USER, BREAKFAST_USER);
+        MealTestData.assertMatch(all, DINNER_USER, LUNCH_USER, BREAKFAST_USER);
     }
 
     @Test
     public void getBetweenHalfOpen() {
-        List<Meal> all = service.getBetweenHalfOpen(LocalDate.of(2020, 2, 23),
-                LocalDate.of(2020, 2, 23), USER_ID);
-        MealTestData.assertMatch(all, BREAKFAST_USER);
+        List<Meal> all = service.getBetweenHalfOpen(LocalDate.of(2020, 2, 24),
+                LocalDate.of(2020, 2, 24), USER_ID);
+        MealTestData.assertMatch(all, DINNER_USER, LUNCH_USER);
     }
 
     @Test
