@@ -14,7 +14,7 @@ import java.time.LocalTime;
         @NamedQuery(name = Meal.ALL_SORTED, query = "SELECT m FROM Meal m WHERE m.user.id=:userId ORDER BY m.dateTime DESC"),
         @NamedQuery(name = Meal.GET, query = "SELECT m FROM Meal m WHERE m.user.id=:userId AND m.id=:id"),
         @NamedQuery(name = Meal.ALL_BETWEEN_SORTED, query = "SELECT m FROM Meal m WHERE m.user.id=:userId AND " +
-                "m.dateTime BETWEEN :startDate AND :endDate ORDER BY m.dateTime DESC")
+                "m.dateTime>=:startDate AND m.dateTime<:endDate ORDER BY m.dateTime DESC")
 })
 
 @Entity
