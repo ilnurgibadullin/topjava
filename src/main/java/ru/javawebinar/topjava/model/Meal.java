@@ -9,11 +9,24 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+@NamedQueries({
+        @NamedQuery(name = Meal.DELETE, query = "DELETE FROM Meal m WHERE m.id=:id AND m.user.id=:userId"),
+        @NamedQuery(name = Meal.ALL_SORTED, query = "SELECT m FROM Meal m WHERE m.user.id=:userId ORDER BY m.dateTime DESC"),
+        @NamedQuery(name = Meal.GET, query = "SELECT m FROM Meal m WHERE m.user.id=:userId AND m.id=:id"),
+        @NamedQuery(name = Meal.ALL_BETWEEN_SORTED, query = "SELECT m FROM Meal m WHERE m.user.id=:userId AND " +
+                "m.dateTime BETWEEN :startDate AND :endDate ORDER BY m.dateTime DESC")
+})
+
 @Entity
 @Table(name = "meals", uniqueConstraints = {@UniqueConstraint(columnNames = "date_time", name = "meals_unique_user_datetime_idx")})
 public class Meal extends AbstractBaseEntity {
 
-    @Column(name = "datetime", nullable = false)
+    public static final String DELETE = "Meal.delete";
+    public static final String ALL_SORTED = "Meal.getAllSorted";
+    public static final String GET = "Meal.get";
+    public static final String ALL_BETWEEN_SORTED = "Meal.getAllBetween";
+
+    @Column(name = "date_time", nullable = false, columnDefinition = "TIMESTAMP")
     @NotNull
     private LocalDateTime dateTime;
 
