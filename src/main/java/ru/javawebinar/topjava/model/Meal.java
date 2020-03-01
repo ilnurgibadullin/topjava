@@ -26,7 +26,7 @@ public class Meal extends AbstractBaseEntity {
     public static final String GET = "Meal.get";
     public static final String ALL_BETWEEN_SORTED = "Meal.getAllBetween";
 
-    @Column(name = "date_time", nullable = false, columnDefinition = "TIMESTAMP")
+    @Column(name = "date_time", nullable = false)
     @NotNull
     private LocalDateTime dateTime;
 
@@ -38,7 +38,7 @@ public class Meal extends AbstractBaseEntity {
     @Range(min = 10, max = 10000)
     private int calories;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private User user;
 
