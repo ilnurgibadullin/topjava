@@ -34,9 +34,6 @@ public class MealServiceTest {
     @Autowired
     private MealRepository repository;
 
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-
     @Test
     public void delete() {
         service.delete(MEAL1_ID, USER_ID);
@@ -45,14 +42,12 @@ public class MealServiceTest {
 
     @Test
     public void deleteNotFound() {
-        thrown.expect(NotFoundException.class);
-        service.delete(1, USER_ID);
+        Assert.assertThrows(NotFoundException.class, () -> service.delete(1, USER_ID));
     }
 
     @Test
     public void deleteNotOwn() {
-        thrown.expect(NotFoundException.class);
-        service.delete(MEAL1_ID, ADMIN_ID);
+        Assert.assertThrows(NotFoundException.class, () -> service.delete(MEAL1_ID, ADMIN_ID));
     }
 
     @Test
@@ -73,13 +68,12 @@ public class MealServiceTest {
 
     @Test
     public void getNotFound() {
-        thrown.expect(NotFoundException.class);
-        service.get(1, USER_ID);
+        Assert.assertThrows(NotFoundException.class, () -> service.get(1, USER_ID));
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void getNotOwn() {
-        service.get(MEAL1_ID, ADMIN_ID);
+        Assert.assertThrows(NotFoundException.class, () -> service.get(MEAL1_ID, ADMIN_ID));
     }
 
     @Test
@@ -91,8 +85,7 @@ public class MealServiceTest {
 
     @Test
     public void updateNotFound() {
-        thrown.expect(NotFoundException.class);
-        service.update(MEAL1, ADMIN_ID);
+        Assert.assertThrows(NotFoundException.class, () -> service.update(MEAL1, ADMIN_ID));
     }
 
     @Test
