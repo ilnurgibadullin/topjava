@@ -33,7 +33,7 @@ public class Meal extends AbstractBaseEntity {
     @NotNull
     private LocalDateTime dateTime;
 
-    @Column(name = "description", nullable = false, unique = true)
+    @Column(name = "description", nullable = false)
     @Size(min = 2, max = 120)
     @NotBlank
     private String description;

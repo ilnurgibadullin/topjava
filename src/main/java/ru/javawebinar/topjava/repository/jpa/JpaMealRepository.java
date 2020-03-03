@@ -22,9 +22,8 @@ public class JpaMealRepository implements MealRepository {
     @Override
     @Transactional
     public Meal save(Meal meal, int userId) {
-        User ref;
         if (meal.isNew()) {
-            ref = em.getReference(User.class, userId);
+            User ref = em.getReference(User.class, userId);
             meal.setUser(ref);
             em.persist(meal);
             return meal;
@@ -32,7 +31,7 @@ public class JpaMealRepository implements MealRepository {
             if (get(meal.getId(), userId) == null) {
                 return null;
             }
-            ref = em.getReference(User.class, userId);
+            User ref = em.getReference(User.class, userId);
             meal.setUser(ref);
             return em.merge(meal);
         }

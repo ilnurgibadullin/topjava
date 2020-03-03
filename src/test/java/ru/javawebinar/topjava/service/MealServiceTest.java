@@ -5,8 +5,6 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
@@ -37,14 +35,12 @@ public class MealServiceTest {
     @Autowired
     private MealRepository repository;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MealServiceTest.class);
-
     @Rule
     public MyJUnitStopWatch stopWatch = new MyJUnitStopWatch();
 
     @AfterClass
     public static void showTime() {
-        LOGGER.info(MyJUnitStopWatch.getAllMessages());
+        MyJUnitStopWatch.LOGGER.info(MyJUnitStopWatch.ALL_MESSAGES);
     }
 
     @Test
