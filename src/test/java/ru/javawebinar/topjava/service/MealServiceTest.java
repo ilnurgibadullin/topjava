@@ -40,7 +40,7 @@ public class MealServiceTest {
 
     @AfterClass
     public static void showTime() {
-        MyJUnitStopWatch.LOGGER.info(MyJUnitStopWatch.ALL_MESSAGES);
+        MyJUnitStopWatch.LOGGER.info(MyJUnitStopWatch.ALL_MESSAGES.toString());
     }
 
     @Test

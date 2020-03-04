@@ -9,19 +9,18 @@ import java.util.concurrent.TimeUnit;
 
 public class MyJUnitStopWatch extends Stopwatch {
     public static final Logger LOGGER = LoggerFactory.getLogger(MyJUnitStopWatch.class);
-    private static final StringBuilder stringBuilder = new StringBuilder();
+    public static final StringBuilder ALL_MESSAGES = new StringBuilder();
     private final int maxLengthTestName = 23;
-    public static final String ALL_MESSAGES = convertStringBuilderToString();
 
     @Override
     protected void finished(long nanos, Description description) {
-        stringBuilder.append(String.format("Test %s %d ms\n",
-                getTestName(description), TimeUnit.NANOSECONDS.toMillis(nanos)));
+        ALL_MESSAGES.append(String.format("Test %s %d ms\n",
+                getFullTestName(description), TimeUnit.NANOSECONDS.toMillis(nanos)));
         LOGGER.info(String.format("Test %s, spent %d milliseconds",
                 description.getMethodName(), TimeUnit.NANOSECONDS.toMillis(nanos)));
     }
 
-    private String getTestName(Description description) {
+    private String getFullTestName(Description description) {
         String testName = description.getMethodName();
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(testName);
@@ -31,9 +30,5 @@ public class MyJUnitStopWatch extends Stopwatch {
             }
         }
         return stringBuilder.toString();
-    }
-
-    private static String convertStringBuilderToString() {
-        return MyJUnitStopWatch.stringBuilder.toString();
     }
 }
