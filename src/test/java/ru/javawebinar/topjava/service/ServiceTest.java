@@ -49,18 +49,4 @@ public abstract class ServiceTest {
                 results +
                 "\n---------------------------------");
     }
-
-    public abstract void create();
-
-    public abstract void get();
-
-    public abstract void getNotFound();
-
-    public abstract void update();
-
-    public abstract void getAll();
-
-    public abstract void delete();
-
-    public abstract void deletedNotFound();
 }

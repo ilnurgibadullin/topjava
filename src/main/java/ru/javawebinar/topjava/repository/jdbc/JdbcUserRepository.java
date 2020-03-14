@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Repository

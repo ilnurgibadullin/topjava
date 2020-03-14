@@ -21,14 +21,12 @@ public abstract class MealServiceTest extends ServiceTest {
     @Autowired
     private MealRepository repository;
 
-    @Override
     @Test
     public void delete() {
         service.delete(MEAL1_ID, USER_ID);
         Assert.assertNull(repository.get(MEAL1_ID, USER_ID));
     }
 
-    @Override
     @Test
     public void deletedNotFound() {
         Assert.assertThrows(NotFoundException.class, () -> service.delete(1, USER_ID));
@@ -49,14 +47,12 @@ public abstract class MealServiceTest extends ServiceTest {
         MEAL_MATCHER.assertMatch(service.get(newId, USER_ID), newMeal);
     }
 
-    @Override
     @Test
     public void get() {
         Meal actual = service.get(ADMIN_MEAL_ID, ADMIN_ID);
         MEAL_MATCHER.assertMatch(actual, ADMIN_MEAL1);
     }
 
-    @Override
     @Test
     public void getNotFound() {
         Assert.assertThrows(NotFoundException.class, () -> service.get(MEAL1_ID, ADMIN_ID));
@@ -67,7 +63,6 @@ public abstract class MealServiceTest extends ServiceTest {
         Assert.assertThrows(NotFoundException.class, () -> service.get(MEAL1_ID, ADMIN_ID));
     }
 
-    @Override
     @Test
     public void update() {
         Meal updated = getUpdated();
@@ -82,7 +77,6 @@ public abstract class MealServiceTest extends ServiceTest {
         Assert.assertEquals("Not found entity with id=" + MEAL1_ID, ex.getMessage());
     }
 
-    @Override
     @Test
     public void getAll() {
         MEAL_MATCHER.assertMatch(service.getAll(USER_ID), MEALS);
