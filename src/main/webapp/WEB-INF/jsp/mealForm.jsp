@@ -4,6 +4,7 @@
 <html>
 <jsp:include page="fragments/headTag.jsp"/>
 <body>
+<jsp:include page="fragments/bodyHeader.jsp"/>
 <section>
     <h3><a href="index.html">Home</a></h3>
     <hr>
