@@ -1,13 +1,12 @@
 package ru.javawebinar.topjava.service;
 
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.Assume;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.CacheManager;
-import org.springframework.core.env.Environment;
 import org.springframework.dao.DataAccessException;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
-import ru.javawebinar.topjava.repository.JpaUtil;
 import ru.javawebinar.topjava.repository.UserRepository;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
@@ -25,18 +24,6 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
     @Autowired
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     private UserRepository repository;
-
-    @Autowired
-    private Environment environment;
-
-    private boolean isJpaProfile() {
-        for (String profile : environment.getActiveProfiles()){
-            if (profile.contains("jpa")) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     @Test
     public void create() throws Exception {
