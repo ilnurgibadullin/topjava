@@ -24,8 +24,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.TestUtil.readFromJson;
+import static ru.javawebinar.topjava.UserTestData.USER;
 import static ru.javawebinar.topjava.UserTestData.USER_ID;
-import static ru.javawebinar.topjava.util.MealsUtil.DEFAULT_CALORIES_PER_DAY;
 
 public class MealRestControllerTest extends AbstractControllerTest {
 
@@ -84,7 +84,7 @@ public class MealRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MEALTO_MATCHER.contentJson(MealsUtil.getTos(MEALS, DEFAULT_CALORIES_PER_DAY)));
+                .andExpect(MEALTO_MATCHER.contentJson(MealsUtil.getTos(MEALS, USER.getCaloriesPerDay())));
     }
 
     @Test
@@ -94,6 +94,8 @@ public class MealRestControllerTest extends AbstractControllerTest {
                 "&to=" + LocalDateTime.of(2020, Month.JANUARY, 30, 23, 59, 59)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MEALTO_MATCHER.contentJson(MealsUtil.getTos(new ArrayList<>(Arrays.asList(MEAL3, MEAL2, MEAL1)), DEFAULT_CALORIES_PER_DAY)));
+                .andExpect(MEALTO_MATCHER.contentJson(MealsUtil.getTos(
+                        new ArrayList<>(Arrays.asList(MEAL3, MEAL2, MEAL1)),
+                        USER.getCaloriesPerDay())));
     }
 }

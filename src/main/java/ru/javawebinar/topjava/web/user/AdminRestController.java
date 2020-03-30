@@ -50,7 +50,7 @@ public class AdminRestController extends AbstractUserController {
         super.update(user, id);
     }
 
-    @GetMapping(value = "/by", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/by")
     public User getByMail(@RequestParam String email) {
         return super.getByMail(email);
     }
